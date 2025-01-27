@@ -10,6 +10,7 @@ import SettingPage from './Pages/SettingPage'
 import { Loader } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
 import { useAuthStore } from './store/useAuhstore'
+import Temp from './temp'
 
 function App() {
   const {authUser, checkAuth, isCheckingAuth} = useAuthStore()
@@ -28,14 +29,15 @@ function App() {
 
   return (
     <>
-      <Navbar />
-      <Routes>
+      {/* <Navbar /> */}
+      <Temp />
+      {/* <Routes>
         <Route path="/" element={authUser ? <Homepage /> : <Navigate to="/login" />} />
         <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
         <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to="/" />} />
         <Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/login" />} />
         <Route path="/setting" element={ <SettingPage /> } />
-      </Routes>
+      </Routes> */}
       <Toaster />
     </>
   )
