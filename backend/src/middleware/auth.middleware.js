@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
 import User from '../model/user.model.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Middleware to protect routes and verify JWT authentication
 // Checks for valid JWT token in cookies and attaches user to request
@@ -15,7 +18,7 @@ export const authMiddleware = async (req, res, next) => {
 
         // Verify token and decode user ID
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
+
         // Find user by ID from token, exclude password from result
         const user = await User.findById(decoded.userId).select('-password');
 
@@ -30,6 +33,10 @@ export const authMiddleware = async (req, res, next) => {
         next();
 
     } catch (error) {
+        // Handle token verification errors
+        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Invalid or expired token' });
+        }
         console.log("error in authMiddleware ::", error);
         res.status(500).json({ message: 'Internal server error in authMiddleware' });
     }

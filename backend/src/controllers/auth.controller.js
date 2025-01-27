@@ -111,11 +111,10 @@ export const logout = async (req, res) => {
 
 // updateProfile controller which will handle the update profile process and update the profile picture
 export const updateProfile = async (req, res) => {
+    const userId = req.user._id;
+    const { profilePicture } = req.body;
 
     try {
-        const { profilePicture } = req.body;
-        const userId = req.user._id;
-
         if (!profilePicture) {
             return res.status(400).json({ message: 'Profile picture is required' });
         }
@@ -124,16 +123,11 @@ export const updateProfile = async (req, res) => {
 
         const user = await User.findByIdAndUpdate(userId, { profilePicture: uploadResponse.secure_url }, { new: true });
 
-        return res.status(200).json({
-            _id: user._id,
-            firstname: user.firstname,
-            email: user.email,
-            profilePicture: user.profilePicture,
-        });
+        return res.status(200).json(user);
 
     } catch (error) {
-        console.log("error in updateProfile ::", error);
-        res.status(500).json({ message: 'Internal server error in updateProfile' });
+        console.log("error in updateProfile :: ", error);
+        res.status(500).json({ message: 'Internal server error in updateProfile', error: error.message });
     }
 }   
 
