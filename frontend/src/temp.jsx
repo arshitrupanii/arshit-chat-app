@@ -8,6 +8,7 @@ const ProfileImageUpload = () => {
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
+    console.log(file)
     if (file) {
       setSelectedImage(file);
       setImagePreview(URL.createObjectURL(file)); // Show a preview
@@ -32,7 +33,7 @@ const ProfileImageUpload = () => {
       setUploadedImageUrl(response.data.secure_url); // Save the uploaded image URL
       alert("Image uploaded successfully!");
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.log("Error uploading image:", error);
       alert("Failed to upload image.");
     }
   };

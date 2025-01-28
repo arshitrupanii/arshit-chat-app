@@ -29,15 +29,15 @@ function App() {
 
   return (
     <>
-      {/* <Navbar /> */}
-      <Temp />
-      {/* <Routes>
+      <Navbar />
+      {/* <Temp /> */}
+      <Routes>
         <Route path="/" element={authUser ? <Homepage /> : <Navigate to="/login" />} />
         <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
         <Route path="/signup" element={!authUser ? <Signup /> : <Navigate to="/" />} />
         <Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/login" />} />
         <Route path="/setting" element={ <SettingPage /> } />
-      </Routes> */}
+      </Routes>
       <Toaster />
     </>
   )
