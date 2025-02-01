@@ -15,8 +15,8 @@ const ProfilePage = () => {
     
     reader.onload = async (e) => {
       const base64Image = e.target.result;
-      console.log(e)
-      setSelectedImg(base64Image);
+      console.log(base64Image)
+      setSelectedImg(URL.createObjectURL(file));
       await updateProfile( { profilePicture: base64Image } );
     };
     
