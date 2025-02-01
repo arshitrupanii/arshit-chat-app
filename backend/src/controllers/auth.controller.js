@@ -41,7 +41,7 @@ export const signup = async (req, res) => {
                 _id: savedUser._id,
                 firstname: savedUser.firstname,
                 email: savedUser.email,
-                profilePicture: savedUser.profilePicture,
+                profilePicttureture: savedUser.profilePicttureture,
 
             });
 
@@ -87,7 +87,7 @@ export const login = async (req, res) => {
             _id: user._id,
             firstname: user.firstname,
             email: user.email,
-            profilePicture: user.profilePicture,
+            profilePicttureture: user.profilePicttureture,
         });
 
     } catch (error) {
@@ -111,25 +111,27 @@ export const logout = async (req, res) => {
 
 // updateProfile controller which will handle the update profile process and update the profile picture
 export const updateProfile = async (req, res) => {
-    const userId = req.user._id;
-    const { profilePicture } = req.body;
-
     try {
-        if (!profilePicture) {
-            return res.status(400).json({ message: 'Profile picture is required' });
-        }
-
-        const uploadResponse = await cloudinary.uploader.upload(profilePicture);
-
-        const user = await User.findByIdAndUpdate(userId, { profilePicture: uploadResponse.secure_url }, { new: true });
-
-        return res.status(200).json(user);
-
+      const { profilePicture } = req.body;
+      const userId = req.user._id;
+  
+      if (!profilePicture) {
+        return res.status(400).json({ message: "Profile pic is required" });
+      }
+  
+      const uploadResponse = await cloudinary.uploader.upload(profilePicture);
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { profilePicture: uploadResponse.secure_url },
+        { new: true }
+      );
+  
+      res.status(200).json(updatedUser);
     } catch (error) {
-        console.log("error in updateProfile :: ", error);
-        res.status(500).json({ message: 'Internal server error in updateProfile', error: error.message });
+      console.log("error in update profile:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
-}   
+  };
 
 // getProfile controller which will handle the get profile process and get the profile picture
 export const getProfile = async (req, res) => {
