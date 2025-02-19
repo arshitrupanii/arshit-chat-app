@@ -1,5 +1,5 @@
 import express from 'express';
-import { getuserFromSidebar, getMessage, sendMessage } from '../controllers/message.controller.js';
+import { getUserFromSidebar, getMessage, sendMessage } from '../controllers/message.controller.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
 // Create an Express router instance for message-related routes
@@ -7,8 +7,8 @@ const router = express.Router();
 
 // Route to get all users for the sidebar chat list
 // Requires authentication
-// GET /api/messages/message
-router.get('/messages', authMiddleware, getuserFromSidebar);
+// GET /api/messages/users
+router.get('/users', authMiddleware, getUserFromSidebar);
 
 // Route to get messages between authenticated user and specified user ID
 // Requires authentication

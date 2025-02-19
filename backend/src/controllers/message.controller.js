@@ -1,8 +1,9 @@
 import User from '../model/user.model.js';
 import Message from '../model/message.model.js';
+import cloudinary from 'cloudinary';
 
 // Controller to get all users except the logged-in user for the sidebar chat list
-export const getuserFromSidebar = async (req, res) => {
+export const getUserFromSidebar = async (req, res) => {
     try {
         // Get current user's ID from auth middleware
         const loggedInUserId = req.user._id;
@@ -12,7 +13,7 @@ export const getuserFromSidebar = async (req, res) => {
         return res.status(200).json(filteredUsers);
 
     } catch (error) {
-        console.log("error in getuserFromSidebar :: ", error);
+        console.log("error in getUserFromSidebar :: ", error);
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
@@ -56,7 +57,7 @@ export const sendMessage = async (req, res) => {
     }
 
     // Create and save new message
-    const newMessage = new Message({ sender, receiverId, text, image: imageUrl });
+    const newMessage = new Message({ sender, receiver: receiverId, text, image: imageUrl });
     await newMessage.save();
     return res.status(200).json(newMessage);
 }
