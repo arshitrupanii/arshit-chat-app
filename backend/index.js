@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './src/lib/db.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import bodyParser from 'body-parser';
+
 
 connectDB();
 
