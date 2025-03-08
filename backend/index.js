@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './src/lib/db.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import bodyParser from 'body-parser';
+
 
 connectDB();
 
@@ -25,7 +25,7 @@ app.use(cors({
 }));
 
 app.use('/api/auth', authRoutes);
-app.use('/api/messages', messageRoutes);
+app.use('/api/meassages', messageRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello World');
