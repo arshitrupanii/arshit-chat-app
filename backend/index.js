@@ -25,7 +25,7 @@ app.use(cors({
 }));
 
 app.use('/api/auth', authRoutes);
-app.use('/api/meassages', messageRoutes);
+app.use('/api/messages', messageRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello World');
