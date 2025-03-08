@@ -1,5 +1,6 @@
 import User from '../model/user.model.js';
 import Message from '../model/message.model.js';
+import cloudinary from '../lib/cloudinary.js';
 
 // Controller to get all users except the logged-in user for the sidebar chat list
 export const getuserFromSidebar = async (req, res) => {
@@ -9,6 +10,7 @@ export const getuserFromSidebar = async (req, res) => {
         // Find all users except the logged-in user, exclude passwords
         const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select('-password');
 
+        console.log(filteredUsers)
         return res.status(200).json(filteredUsers);
 
     } catch (error) {
@@ -50,13 +52,18 @@ export const sendMessage = async (req, res) => {
 
     // Upload image to Cloudinary if provided
     let imageUrl ;
+    let newMessage;
     if(image){
         const uploadResponse = await cloudinary.uploader.upload(image);
         imageUrl = uploadResponse.secure_url;
+        newMessage = new Message({ sender, receiverId, text, image: imageUrl });
+        console.log("newMessage",newMessage);
+    }
+    else{
+        newMessage = new Message({ sender, receiverId, text });
     }
 
     // Create and save new message
-    const newMessage = new Message({ sender, receiverId, text, image: imageUrl });
     await newMessage.save();
     return res.status(200).json(newMessage);
 }

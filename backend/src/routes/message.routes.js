@@ -7,8 +7,8 @@ const router = express.Router();
 
 // Route to get all users for the sidebar chat list
 // Requires authentication
-// GET /api/messages/message
-router.get('/message', authMiddleware, getuserFromSidebar);
+// GET /api/messages/users
+router.get('/users', authMiddleware, getuserFromSidebar);
 
 // Route to get messages between authenticated user and specified user ID
 // Requires authentication
