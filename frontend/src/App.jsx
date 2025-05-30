@@ -13,13 +13,14 @@ import { useAuthStore } from './store/useAuhstore'
 import { Usethemes } from './store/useTheme'
 
 function App() {
-  const {authUser, checkAuth, isCheckingAuth} = useAuthStore()
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   const {theme} = Usethemes()
 
   useEffect(() => {
     checkAuth()
   }, [checkAuth])
 
+  console.log({ onlineUsers });
 
   if(isCheckingAuth && !authUser) return(
     <div className='flex justify-center items-center h-screen'>

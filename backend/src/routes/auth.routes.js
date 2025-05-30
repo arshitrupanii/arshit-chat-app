@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup, login, logout, updateProfile, getProfile } from '../controllers/auth.controller.js';
+import { signup, login, logout, updateProfile, checkAuth  } from '../controllers/auth.controller.js';
 import {authMiddleware} from '../middleware/auth.middleware.js';
 
 // Create an Express router instance for authentication routes
@@ -20,12 +20,12 @@ router.post('/logout', logout);
 // Route to update user's profile picture
 // Requires authentication
 // POST /api/auth/update-profile
-router.post('/update-profile', authMiddleware, updateProfile);
+router.put('/update-profile', authMiddleware, updateProfile);
 
 // Route to get authenticated user's profile data
 // Requires authentication
 // GET /api/auth/check
-router.get('/check', authMiddleware, getProfile);
+router.get('/check', authMiddleware, checkAuth );
 
 // Export the router for use in the main application
 export default router;

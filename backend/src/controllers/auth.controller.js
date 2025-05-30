@@ -41,7 +41,7 @@ export const signup = async (req, res) => {
                 _id: savedUser._id,
                 firstname: savedUser.firstname,
                 email: savedUser.email,
-                profilePicttureture: savedUser.profilePicttureture,
+                profilePicture: savedUser.profilePicture,
 
             });
 
@@ -87,7 +87,7 @@ export const login = async (req, res) => {
             _id: user._id,
             firstname: user.firstname,
             email: user.email,
-            profilePicttureture: user.profilePicttureture,
+            profilePicture: user.profilePicture,
         });
 
     } catch (error) {
@@ -118,6 +118,7 @@ export const updateProfile = async (req, res) => {
       if (!profilePicture) {
         return res.status(400).json({ message: "Profile pic is required" });
       }
+
   
       const uploadResponse = await cloudinary.uploader.upload(profilePicture);
       const updatedUser = await User.findByIdAndUpdate(
@@ -127,14 +128,15 @@ export const updateProfile = async (req, res) => {
       );
   
       res.status(200).json(updatedUser);
+
     } catch (error) {
-      console.log("error in update profile:", error);
+      console.log("error in update profiless:", error?.message);
       res.status(500).json({ message: "Internal server error" });
     }
   };
 
 // getProfile controller which will handle the get profile process and get the profile picture
-export const getProfile = async (req, res) => {
+export const checkAuth = async (req, res) => {
     const userId = req.user._id;
     const user = await User.findById(userId);
     return res.status(200).json(user);

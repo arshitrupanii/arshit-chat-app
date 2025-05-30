@@ -30,8 +30,8 @@ export const getMessage = async (req, res) => {
         // Find all messages between these two users (in both directions)
         const messages = await Message.find({
             $or: [
-                { sender: myId, receiver: userToChatid },
-                { sender: userToChatid, receiver: myId }
+                { senderId: myId, receiverId: userToChatid },
+                { senderId: userToChatid, receiverId: myId }
             ]
         });
 
@@ -46,30 +46,31 @@ export const getMessage = async (req, res) => {
 // Controller to send a new message with optional image attachment
 export const sendMessage = async (req, res) => {
     // Extract message data from request
-    const { text, image } = req.body;
-    const sender = req.user._id;
-    const {id:receiverId} = req.params;
+    try {
+        const { text, image } = req.body;
+        const { id: receiverId } = req.params;
+        const senderId = req.user._id;
 
-    // Upload image to Cloudinary if provided
-    let imageUrl ;
+        // Upload image to Cloudinary if provided
+        let imageUrl;
 
-    if(image){
-        const uploadResponse = await cloudinary.uploader.upload(image);
-        imageUrl = uploadResponse.secure_url;
+        if (image) {
+            const uploadResponse = await cloudinary.uploader.upload(image);
+            imageUrl = uploadResponse.secure_url;
+        }
+
+        // Create and save new message
+        const newMessage = new Message({ senderId, receiverId, text, image: imageUrl });
+        await newMessage.save();
+
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage);
+        }
+
+        return res.status(201).json(newMessage);
+
+    } catch (error) {
+        console.log("error in send message :  ", error)
     }
-    else{
-        imageUrl = null;
-    }
-    console.log('imageUrl:', imageUrl);
-
-    // Create and save new message
-    const newMessage = new Message({ sender, receiverId, text, image: imageUrl });
-    await newMessage.save();
-
-    const receiverSocketId = getReceiverSocketId(receiverId);
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", newMessage);
-    }
-
-    return res.status(200).json(newMessage);
 }

@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
 import { useChatStore } from "../store/useChatstore";
-import { Image, Send, X } from "lucide-react";
+import { Image, Loader, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
 
 const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
+  const [btnLoading, setbtnLoading] = useState(false)
   const fileInputRef = useRef(null);
   const { sendMessage } = useChatStore();
 
@@ -33,12 +34,15 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
+      setbtnLoading(true);
+
       await sendMessage({
         text: text.trim(),
         image: imagePreview,
       });
 
-      // Clear form
+      setbtnLoading(false);
+
       setText("");
       setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -95,13 +99,19 @@ const MessageInput = () => {
             <Image size={20} />
           </button>
         </div>
-        <button
-          type="submit"
-          className="btn btn-sm btn-circle"
-          disabled={!text.trim() && !imagePreview}
-        >
-          <Send size={22} />
-        </button>
+
+        {btnLoading ? (
+          <Loader className='animate-spin text-primary' size={35} />
+        ) : (
+          <button
+            type="submit"
+            className="btn btn-sm btn-circle"
+            disabled={!text.trim() && !imagePreview}
+          >
+            <Send size={22} />
+          </button>
+        )
+        }
       </form>
     </div>
   );

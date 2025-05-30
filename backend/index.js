@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './src/lib/db.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import { app, server } from "./src/lib/socket.js";
 
 
 connectDB();
@@ -12,7 +13,6 @@ connectDB();
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-const app = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
@@ -31,6 +31,6 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log('Server is running on port ' + PORT);
 });

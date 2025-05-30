@@ -1,10 +1,9 @@
-// this is same code as it is...
 import { create } from "zustand";
-import { Axiosinstance } from "../lib/axios.js";
+import { Axiosinstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:4000" : "/";
+const BASE_URL = "http://localhost:4000"; // for development
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
@@ -76,7 +75,7 @@ export const useAuthStore = create((set, get) => ({
       set({ authUser: res.data });
       toast.success("Profile updated successfully");
     } catch (error) {
-      console.log("error in update profile:", error);
+      console.log("error in update profile:", error.message);
       toast.error(error.response.data.message);
     } finally {
       set({ isUpdatingProfile: false });
@@ -93,21 +92,23 @@ export const useAuthStore = create((set, get) => ({
           userId: authUser._id,
         },
       });
+
       socket.connect();
 
       set({ socket: socket });
 
       socket.on("getOnlineUsers", (userIds) => {
         set({ onlineUsers: userIds });
-      });
+      })
+
+
     } catch (error) {
-      console.log("error in connectSocket :: ", error);
+      console.log("error in connect socket : ", error);
     }
   },
 
-
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
-  }
+  },
 
-}))
+}));
