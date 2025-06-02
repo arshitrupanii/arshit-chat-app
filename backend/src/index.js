@@ -21,7 +21,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? 'https://arshit-chat-app.onrender.com': 'http://localhost:5173',
+    origin: 'https://arshit-chat-app.onrender.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));

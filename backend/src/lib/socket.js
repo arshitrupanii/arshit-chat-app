@@ -7,7 +7,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: [process.env.NODE_ENV === 'production' ? 'https://arshit-chat-app.onrender.com': 'http://localhost:5173'],
+    origin: ['https://arshit-chat-app.onrender.com'],
   },
 });
 
