@@ -5,4 +5,4 @@ export const Axiosinstance = axios.create({
     withCredentials: true
 });
 
-console.log("axios : " , );
+console.log("axios : " , import.meta);
