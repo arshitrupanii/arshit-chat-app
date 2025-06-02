@@ -13,7 +13,7 @@ import { useAuthStore } from './store/useAuhstore'
 import { Usethemes } from './store/useTheme'
 
 function App() {
-  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const {theme} = Usethemes()
 
   useEffect(() => {
