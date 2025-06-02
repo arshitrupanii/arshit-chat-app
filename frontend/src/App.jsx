@@ -20,8 +20,6 @@ function App() {
     checkAuth()
   }, [checkAuth])
 
-  console.log({ onlineUsers });
-
   if(isCheckingAuth && !authUser) return(
     <div className='flex justify-center items-center h-screen'>
       <Loader className='animate-spin text-primary' size={50} />
