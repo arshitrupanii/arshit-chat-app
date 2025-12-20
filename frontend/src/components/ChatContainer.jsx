@@ -16,6 +16,7 @@ const ChatContainer = () => {
     subscribeToMessages,
     unsubscribeFromMessages,
   } = useChatStore();
+
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
   useEffect(() => {
@@ -72,13 +73,13 @@ const ChatContainer = () => {
               </time>
             </div>
             <div className="chat-bubble flex flex-col">
-              {message.image && (
+              {/* {message.image && (
                 <img
                   src={message.image}
                   alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
+                  className="sm:max-w-[200px] w-full rounded-md mb-2"
                 />
-              )}
+              )} */}
               {message.text && <p>{message.text}</p>}
             </div>
           </div>

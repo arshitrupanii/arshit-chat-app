@@ -1,57 +1,51 @@
 import User from '../model/user.model.js';
 import Message from '../model/message.model.js';
-import cloudinary from 'cloudinary';
+import cloudinary from '../lib/cloudinary.js';
 import { getReceiverSocketId, io } from "../lib/socket.js";
 
-// Controller to get all users except the logged-in user for the sidebar chat list
 export const getUserFromSidebar = async (req, res) => {
     try {
-        // Get current user's ID from auth middleware
         const loggedInUserId = req.user._id;
-        // Find all users except the logged-in user, exclude passwords
-        const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select('-password');
+        const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password -createdAt -updatedAt");
 
         return res.status(200).json(filteredUsers);
 
     } catch (error) {
-        console.log("error in getUserFromSidebar :: ", error);
-        return res.status(500).json({ message: 'Internal server error' });
+        console.log("error in get User From Sidebar :  ", error);
+        return res.status(500).json({ message: 'Internal error Get User' });
     }
 }
 
-// Controller to get messages between two users
 export const getMessage = async (req, res) => {
     try {
-        // Get ID of user to chat with from URL params
         const { id: userToChatid } = req.params;
-        // Get current user's ID from auth middleware
         const myId = req.user._id;
 
-        // Find all messages between these two users (in both directions)
         const messages = await Message.find({
             $or: [
                 { senderId: myId, receiverId: userToChatid },
                 { senderId: userToChatid, receiverId: myId }
             ]
-        });
+        }).sort({ createdAt: 1 });
 
         return res.status(200).json(messages);
 
     } catch (error) {
-        console.log("error in getMessage :: ", error);
-        return res.status(500).json({ message: 'Internal server error' });
+        console.log("error in get Message :  ", error);
+        return res.status(500).json({ message: 'Internal error Get Message' });
     }
 }
 
-// Controller to send a new message with optional image attachment
 export const sendMessage = async (req, res) => {
-    // Extract message data from request
     try {
         const { text, image } = req.body;
         const { id: receiverId } = req.params;
         const senderId = req.user._id;
 
-        // Upload image to Cloudinary if provided
+        if (!text && !image) {
+            return res.status(400).json({ message: 'Text is required' });
+        }
+
         let imageUrl;
 
         if (image) {
@@ -59,7 +53,7 @@ export const sendMessage = async (req, res) => {
             imageUrl = uploadResponse.secure_url;
         }
 
-        // Create and save new message
+
         const newMessage = new Message({ senderId, receiverId, text, image: imageUrl });
         await newMessage.save();
 
@@ -72,5 +66,6 @@ export const sendMessage = async (req, res) => {
 
     } catch (error) {
         console.log("error in send message :  ", error)
+        return res.status(500).json({ message: 'Internal error Send Message' });
     }
 }

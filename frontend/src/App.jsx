@@ -1,12 +1,13 @@
-import './App.css'
 import { useEffect } from 'react'
 import { Route, Routes,Navigate } from 'react-router-dom'
+
 import Navbar from './components/Navbar'
 import Homepage from './Pages/Homepage'
 import Profile from './Pages/Profile'
 import LoginPage from './Pages/LoginPage'
 import Signup from './Pages/Signup'
 import SettingPage from './Pages/SettingPage'
+
 import { Loader } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
 import { useAuthStore } from './store/useAuhstore'

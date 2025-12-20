@@ -18,7 +18,7 @@ export const useChatStore = create((set, get) => ({
 
     } catch (error) {
       console.error("error is ", error);
-      toast.error("Error fetching users");
+      toast.error(error.response.data.message);
     } finally {
       set({ isUsersLoading: false });
     }
@@ -35,6 +35,7 @@ export const useChatStore = create((set, get) => ({
       set({ isMessagesLoading: false });
     }
   },
+  
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
     try {

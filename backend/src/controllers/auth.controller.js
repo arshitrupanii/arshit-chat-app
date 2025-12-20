@@ -60,7 +60,7 @@ export const signup = async (req, res) => {
 
     } catch (error) {
         console.log("error in signup ::", error);
-        res.status(500).json({ message: 'Internal server error in signup' });
+        res.status(500).json({ message: 'Internal error in signup' });
     }
 };
 
@@ -105,7 +105,7 @@ export const logout = async (req, res) => {
         return res.status(200).json({ message: 'Logout successful' });
     } catch (error) {
         console.log("error in logout ::", error);
-        res.status(500).json({ message: 'Internal server error in logout' });
+        res.status(500).json({ message: 'Internal error in logout' });
     }
 };
 
@@ -131,14 +131,19 @@ export const updateProfile = async (req, res) => {
 
     } catch (error) {
       console.log("error in update profiless:", error?.message);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: "Internal error in Update" });
     }
   };
 
 // getProfile controller which will handle the get profile process and get the profile picture
 export const checkAuth = async (req, res) => {
-    const userId = req.user._id;
-    const user = await User.findById(userId);
-    return res.status(200).json(user);
+    try {
+        const user = req.user;
+        res.status(200).json(user);
+        
+    } catch (error) {
+        console.log("error in checkAuth : ", error);
+        res.status(500).json({ message: 'Internal Error in checkAuth' });
+    }
 }
 
