@@ -20,7 +20,7 @@ export const authMiddleware = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // Find user by ID from token, exclude password from result
-        const user = await User.findById(decoded.userId).select('-password');
+        const user = await User.findById(decoded.userId).select('-password -createdAt -updatedAt');
 
         // Check if user exists in database
         if (!user) {
@@ -37,7 +37,7 @@ export const authMiddleware = async (req, res, next) => {
         if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
             return res.status(401).json({ message: 'Invalid or expired token' });
         }
-        console.log("error in authMiddleware ::", error);
+        console.log("error in authMiddleware : ", error);
         res.status(500).json({ message: 'Internal server error in authMiddleware' });
     }
 }
