@@ -24,6 +24,15 @@ app.use(cors({
   credentials: true
 }));
 
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 
@@ -31,21 +40,6 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-const startServer = async () => {
-  try {
-    await connectDB(); // ⬅️ wait for DB
-    console.log('MongoDB connected');
-
-    server.listen(PORT, () => {
-      console.log('Server is running on port ' + PORT);
-    });
-
-  } catch (err) {
-    console.error('Failed to start server:', err);
-    process.exit(1);
-  }
-};
-
-startServer();
-
-export default app;
+server.listen(PORT, () => {
+  console.log('Server is running on port ' + PORT);
+});
