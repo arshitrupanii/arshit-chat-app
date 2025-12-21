@@ -10,5 +10,4 @@ router.post('/logout', logout);
 router.put('/update-profile', authMiddleware, updateProfile);
 router.get('/check', authMiddleware, checkAuth );
 
-
 export default router;

@@ -10,16 +10,9 @@ export const authMiddleware = async (req, res, next) => {
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
+
         const user = await User.findById(decoded.userId).select("-password -createdAt -updatedAt");
 
-<<<<<<< HEAD:backend/middleware/auth.middleware.js
-        // Find user by ID from token, exclude password from result
-        const user = await User.findById(decoded.userId).select('-password -createdAt -updatedAt');
-
-        // Check if user exists in database
-=======
->>>>>>> c73f35997bbcc54f3b676c279484fe5fb7ef19c4:backend/src/middleware/auth.middleware.js
         if (!user) {
             return res.status(401).json({ message: 'Unauthorized user ' });
         }

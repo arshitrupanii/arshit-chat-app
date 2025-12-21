@@ -122,8 +122,8 @@ export const updateProfile = async (req, res) => {
         res.status(200).json(updatedUser);
 
     } catch (error) {
-      console.log("error in update profiless:", error?.message);
-      res.status(500).json({ message: "Internal error in Update" });
+        console.log("error in update profiless:", error?.message);
+        res.status(500).json({ message: "Internal error in Update" });
     }
 };
 
@@ -132,7 +132,7 @@ export const checkAuth = async (req, res) => {
     try {
         const user = req.user;
         res.status(200).json(user);
-        
+
     } catch (error) {
         console.log("error in checkAuth : ", error);
         res.status(500).json({ message: 'Internal Error in checkAuth' });
