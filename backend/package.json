@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"No build step required for this project\"",
     "dev": "nodemon src/server.js",
     "start": "node src/server.js"
   },
