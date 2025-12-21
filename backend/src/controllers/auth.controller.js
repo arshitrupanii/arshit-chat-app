@@ -82,7 +82,7 @@ export const login = async (req, res) => {
 
     } catch (error) {
         console.log("error in login : ", error);
-        res.status(500).json({ message: "Internal error in login" });
+        res.status(500).json({ message: `Internal error in login ${error.message}` });
     }
 
 };
