@@ -10,7 +10,6 @@ import { app, server } from "./lib/socket.js";
 
 dotenv.config();
 
-connectDB();
 
 const PORT = process.env.PORT || 3000;
 
@@ -32,6 +31,19 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-server.listen(PORT, () => {
-  console.log('Server is running on port ' + PORT);
-});
+const startServer = async () => {
+  try {
+    await connectDB(); // ⬅️ wait for DB
+    console.log('MongoDB connected');
+
+    server.listen(PORT, () => {
+      console.log('Server is running on port ' + PORT);
+    });
+
+  } catch (err) {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  }
+};
+
+startServer();
