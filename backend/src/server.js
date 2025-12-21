@@ -36,7 +36,9 @@ app.use(async (req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+  const db = await connectDB();
+  console.log(db)
   res.send('API is running...');
 });
 
