@@ -44,7 +44,7 @@ export const signup = async (req, res) => {
         });
 
     } catch (error) {
-        console.log("error in signup : ", error);
+        console.log("error in signup ::", error);
         res.status(500).json({ message: 'Internal error in signup' });
     }
 };
@@ -94,7 +94,7 @@ export const logout = async (req, res) => {
         return res.status(200).json({ message: 'Logout successful' });
 
     } catch (error) {
-        console.log("error in logout : ", error);
+        console.log("error in logout ::", error);
         res.status(500).json({ message: 'Internal error in logout' });
     }
 };
@@ -122,8 +122,8 @@ export const updateProfile = async (req, res) => {
         res.status(200).json(updatedUser);
 
     } catch (error) {
-        console.log("error in update profiles : ", error);
-        res.status(500).json({ message: "Internal server error in update profile" });
+      console.log("error in update profiless:", error?.message);
+      res.status(500).json({ message: "Internal error in Update" });
     }
 };
 
@@ -131,12 +131,11 @@ export const updateProfile = async (req, res) => {
 export const checkAuth = async (req, res) => {
     try {
         const user = req.user;
-
-        return res.status(200).json(user);
-    }
-    catch (error) {
-        console.log("error in check auth : ", error);
-        res.status(500).json({ message: "Internal server" });
+        res.status(200).json(user);
+        
+    } catch (error) {
+        console.log("error in checkAuth : ", error);
+        res.status(500).json({ message: 'Internal Error in checkAuth' });
     }
 }
 

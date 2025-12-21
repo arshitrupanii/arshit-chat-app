@@ -14,7 +14,7 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const { signup, isSigningUp } = useAuthStore();
+  const { signup, isLoading } = useAuthStore();
 
   const validateForm = () => {
     if (!formData.firstname.trim()) return toast.error("Full name is required");
@@ -118,8 +118,8 @@ const SignUpPage = () => {
             </div>
 
 
-            <button type="submit" className="btn btn-primary w-full" disabled={isSigningUp}>
-              {isSigningUp ? (
+            <button type="submit" className="btn btn-primary w-full" disabled={isLoading}>
+              {isLoading ? (
                 <>
                   <Loader2 className="size-5 animate-spin" />
                   Loading...
