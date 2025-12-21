@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import User from '../model/user.model.js';
 
 export const authMiddleware = async (req, res, next) => {
+    console.log(req.cookies)
     const token = req.cookies.jwt;
 
     try {
