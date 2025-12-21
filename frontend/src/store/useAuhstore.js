@@ -3,7 +3,12 @@ import { Axiosinstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3000" : import.meta.env.VITE_BACKEND_URL;
+const getBaseURL = () => {
+  if (import.meta.env.MODE === "development") {
+    return "http://localhost:3000";
+  }
+    return import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL?.replace('/api', '') || "https://arshit-chat-app-backend.vercel.app";
+};
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
@@ -20,7 +25,6 @@ export const useAuthStore = create((set, get) => ({
       get().connectSocket();
 
     } catch (error) {
-      // console.log("Error in checkAuth : ", error);
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
@@ -89,7 +93,7 @@ export const useAuthStore = create((set, get) => ({
       const { authUser } = get();
       if (!authUser || get().socket?.connected) return;
 
-      const socket = io(BASE_URL, {
+      const socket = io(getBaseURL(), {
         query: {
           userId: authUser._id,
         },
@@ -101,10 +105,14 @@ export const useAuthStore = create((set, get) => ({
 
       socket.on("getOnlineUsers", (userIds) => {
         set({ onlineUsers: userIds });
-      })
+      });
 
     } catch (error) {
-      console.log("error in connect socket : ", error);
+      // Silently handle socket connection errors in production
+      if (import.meta.env.MODE === "development") {
+        // eslint-disable-next-line no-console
+        console.error("Error connecting socket:", error);
+      }
     }
   },
 
