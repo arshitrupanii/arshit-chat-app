@@ -24,14 +24,7 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
+await connectDB();
 
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
