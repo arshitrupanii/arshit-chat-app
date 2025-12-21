@@ -6,7 +6,7 @@ export const authMiddleware = async (req, res, next) => {
 
     try {
         if (!token) {
-            return res.status(401).json({ message: 'Unauthorized user ' });
+            return res.status(401).json({ message: 'Unauthorized user' });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -14,7 +14,7 @@ export const authMiddleware = async (req, res, next) => {
         const user = await User.findById(decoded.userId).select("-password -createdAt -updatedAt");
 
         if (!user) {
-            return res.status(401).json({ message: 'Unauthorized user ' });
+            return res.status(401).json({ message: 'Un-authorized user' });
         }
 
         req.user = user;
