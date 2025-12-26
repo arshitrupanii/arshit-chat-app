@@ -6,7 +6,8 @@ export const generateToken = (userId, res) => {
     res.cookie('jwt', token, {
         httpOnly: true,
         secure: true,
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        domain: ".arshit-chat-app.vercel.app",
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000
     })
 
