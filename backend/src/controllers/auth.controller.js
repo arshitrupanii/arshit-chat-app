@@ -4,7 +4,6 @@ import { generateToken } from '../lib/utils.js';
 import cloudinary from '../lib/cloudinary.js';
 
 
-// signup controller which will handle the signup process create hash password and generate token
 export const signup = async (req, res) => {
     const { firstname, email, password } = req.body;
 
@@ -36,6 +35,8 @@ export const signup = async (req, res) => {
         const savedUser = await newUser.save();
         generateToken(savedUser._id, res);
 
+
+
         return res.status(201).json({
             _id: savedUser._id,
             firstname: savedUser.firstname,
@@ -44,12 +45,12 @@ export const signup = async (req, res) => {
         });
 
     } catch (error) {
-        console.log("error in signup ::", error);
+        console.log("error in signup : ", error);
         res.status(500).json({ message: 'Internal error in signup' });
     }
 };
 
-// login controller which will handle the login process and generate token
+
 export const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -82,28 +83,25 @@ export const login = async (req, res) => {
 
     } catch (error) {
         console.log("error in login : ", error);
-        res.status(500).json({ message: `Internal error in login ${error.message}` });
+        res.status(500).json({ message: `Internal error in login` });
     }
-
 };
 
-// logout controller which will handle the logout process and clear the token
+
 export const logout = async (req, res) => {
     try {
         res.clearCookie('jwt', { maxAge: 0 });
         return res.status(200).json({ message: 'Logout successful' });
 
     } catch (error) {
-        console.log("error in logout ::", error);
+        console.log("error in logout : ", error);
         res.status(500).json({ message: 'Internal error in logout' });
     }
 };
 
-// updateProfile controller which will handle the update profile process and update the profile picture
 export const updateProfile = async (req, res) => {
     try {
         const { profilePicture } = req.body;
-        console.log(req)
 
         const userId = req.user._id;
 
@@ -127,7 +125,6 @@ export const updateProfile = async (req, res) => {
     }
 };
 
-// getProfile controller which will handle the get profile process and get the profile picture
 export const checkAuth = async (req, res) => {
     try {
         const user = req.user;
@@ -138,4 +135,3 @@ export const checkAuth = async (req, res) => {
         res.status(500).json({ message: 'Internal Error in checkAuth' });
     }
 }
-

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import User from '../model/user.model.js';
 
 export const authMiddleware = async (req, res, next) => {
-    const token = req.cookies?.jwt;
+    const token = req.cookies?.ChatAppToken;
 
     try {
         if (!token) {

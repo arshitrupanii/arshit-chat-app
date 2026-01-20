@@ -24,14 +24,13 @@ app.use(cors({
   credentials: true
 }));
 
-await connectDB();
+
+connectDB();
 
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 
 app.get('/', async (req, res) => {
-  const db = await connectDB();
-  console.log(db)
   res.send('API is running...');
 });
 
