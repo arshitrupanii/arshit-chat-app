@@ -8,18 +8,13 @@ export const signup = async (req, res) => {
     const { firstname, email, password } = req.body;
 
     try {
-        if (!firstname || !email || !password) {
-            return res.status(400).json({ message: 'All fields are required' });
-        }
-
-        if (password.length < 6) {
-            return res.status(400).json({ message: 'Password must be at least 6 characters' });
-        }
-
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(400).json({
+                success: false,
+                message: 'User already exists'
+            });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -35,18 +30,23 @@ export const signup = async (req, res) => {
         const savedUser = await newUser.save();
         generateToken(savedUser._id, res);
 
-
-
         return res.status(201).json({
-            _id: savedUser._id,
-            firstname: savedUser.firstname,
-            email: savedUser.email,
-            profilePicture: savedUser.profilePicture,
+            success: true,
+            user: {
+                _id: savedUser._id,
+                firstname: savedUser.firstname,
+                email: savedUser.email,
+                profilePicture: savedUser.profilePicture,
+            }
         });
 
     } catch (error) {
         console.log("error in signup : ", error);
-        res.status(500).json({ message: 'Internal error in signup' });
+
+        return res.status(500).json({
+            success: false,
+            message: "Signup failed"
+        });
     }
 };
 
@@ -55,35 +55,40 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-
-        if (!email || !password) {
-            return res.status(400).json({ message: 'All fields are required' });
-        }
-
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({ message: 'User not found' });
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            });
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
         if (!isPasswordCorrect) {
-            return res.status(400).json({ message: 'Invalid password' });
+            return res.status(400).json({ success: false, message: 'Invalid password' });
         }
 
         generateToken(user._id, res);
 
         return res.status(200).json({
-            _id: user._id,
-            firstname: user.firstname,
-            email: user.email,
-            profilePicture: user.profilePicture,
+            success: true,
+            user: {
+                _id: user._id,
+                firstname: user.firstname,
+                email: user.email,
+                profilePicture: user.profilePicture,
+            }
         });
 
     } catch (error) {
         console.log("error in login : ", error);
-        res.status(500).json({ message: `Internal error in login` });
+
+        return res.status(500).json({
+            success: false,
+            message: "Login failed"
+        });
     }
 };
 
@@ -95,7 +100,11 @@ export const logout = async (req, res) => {
 
     } catch (error) {
         console.log("error in logout : ", error);
-        res.status(500).json({ message: 'Internal error in logout' });
+
+        return res.status(500).json({
+            success: false,
+            message: "Logout failed"
+        });
     }
 };
 
@@ -106,9 +115,8 @@ export const updateProfile = async (req, res) => {
         const userId = req.user._id;
 
         if (!profilePicture) {
-            return res.status(400).json({ message: "Profile pic is required" });
+            return res.status(400).json({ success: false, message: "Profile pic is required" });
         }
-
 
         const uploadResponse = await cloudinary.uploader.upload(profilePicture);
         const updatedUser = await User.findByIdAndUpdate(
@@ -117,21 +125,29 @@ export const updateProfile = async (req, res) => {
             { new: true }
         );
 
-        res.status(200).json(updatedUser);
+        return res.status(200).json(updatedUser);
 
     } catch (error) {
-        console.log("error in update profiless:", error?.message);
-        res.status(500).json({ message: "Internal error in Update" });
+        console.log("error in update profiles : ", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Update failed"
+        });
     }
 };
 
 export const checkAuth = async (req, res) => {
     try {
         const user = req.user;
-        res.status(200).json(user);
+        return res.status(200).json(user);
 
     } catch (error) {
         console.log("error in checkAuth : ", error);
-        res.status(500).json({ message: 'Internal Error in checkAuth' });
+
+        return res.status(500).json({
+            success: false,
+            message: "Check auth failed"
+        });
     }
 }

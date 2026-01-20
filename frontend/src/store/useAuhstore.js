@@ -3,12 +3,6 @@ import { Axiosinstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const getBaseURL = () => {
-  if (import.meta.env.MODE === "development") {
-    return "http://localhost:3000";
-  }
-    return import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL?.replace('/api', '') || "https://arshit-chat-app-backend.vercel.app";
-};
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
@@ -95,7 +89,7 @@ export const useAuthStore = create((set, get) => ({
       const { authUser } = get();
       if (!authUser || get().socket?.connected) return;
 
-      const socket = io(getBaseURL(), {
+      const socket = io(import.meta.env.BACKEND_URL, {
         query: {
           userId: authUser._id,
         },
