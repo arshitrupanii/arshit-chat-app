@@ -14,6 +14,7 @@ import { useAuthStore } from './store/useAuhstore'
 import { Usethemes } from './store/useTheme'
 
 function App() {
+  console.log(`${import.meta.env.VITE_BACKEND_URL}/api`)
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const {theme} = Usethemes()
 
