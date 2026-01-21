@@ -25,8 +25,6 @@ app.use(cors({
 }));
 
 
-connectDB();
-
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 
@@ -34,6 +32,9 @@ app.get('/', async (req, res) => {
   res.send('API is running...');
 });
 
-server.listen(PORT, () => {
-  console.log('Server is running on port ' + PORT);
-});
+(async () => {
+  await connectDB();
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+})();
