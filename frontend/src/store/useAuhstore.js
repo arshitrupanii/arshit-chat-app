@@ -16,8 +16,8 @@ export const useAuthStore = create((set, get) => ({
       const res = await Axiosinstance.get("auth/check");
 
       set({ authUser: res.data })
-      get().connectSocket();
 
+      get().connectSocket();
     } catch (error) {
       set({ authUser: null });
     } finally {
@@ -99,16 +99,17 @@ export const useAuthStore = create((set, get) => ({
   connectSocket: () => {
     try {
       const { authUser } = get();
+      
       if (!authUser || get().socket?.connected) return;
-
-      const socket = io(import.meta.env.BACKEND_URL, {
+      
+      const socket = io(import.meta.env.VITE_BACKEND_URL, {
         query: {
           userId: authUser._id,
         },
       });
-
+      
       socket.connect();
-
+      
       set({ socket: socket });
 
       socket.on("getOnlineUsers", (userIds) => {
@@ -116,9 +117,7 @@ export const useAuthStore = create((set, get) => ({
       });
 
     } catch (error) {
-      // Silently handle socket connection errors in production
       if (import.meta.env.MODE === "development") {
-        // eslint-disable-next-line no-console
         console.error("Error connecting socket:", error);
       }
     }
