@@ -14,13 +14,12 @@ import { useAuthStore } from './store/useAuhstore'
 import { Usethemes } from './store/useTheme'
 
 function App() {
-  console.log(`${import.meta.env.VITE_BACKEND_URL}/api`)
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const {theme} = Usethemes()
 
   useEffect(() => {
     checkAuth()
-  }, [])
+  }, [checkAuth])
 
   if(isCheckingAuth && !authUser) return(
     <div className='flex justify-center items-center h-screen'>
