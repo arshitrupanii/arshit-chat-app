@@ -11,10 +11,7 @@ export const signup = async (req, res) => {
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            return res.status(400).json({
-                success: false,
-                message: 'User already exists'
-            });
+            return res.status(400).json({ message: 'User already exists' });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -31,22 +28,15 @@ export const signup = async (req, res) => {
         generateToken(savedUser._id, res);
 
         return res.status(201).json({
-            success: true,
-            user: {
-                _id: savedUser._id,
-                firstname: savedUser.firstname,
-                email: savedUser.email,
-                profilePicture: savedUser.profilePicture,
-            }
+            _id: savedUser._id,
+            firstname: savedUser.firstname,
+            email: savedUser.email,
+            profilePicture: savedUser.profilePicture,
         });
 
     } catch (error) {
         console.log("error in signup : ", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Signup failed"
-        });
+        return res.status(500).json({ message: "Signup failed" });
     }
 };
 
@@ -58,37 +48,27 @@ export const login = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({
-                success: false,
-                message: 'User not found'
-            });
+            return res.status(400).json({ message: 'User not found' });
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
         if (!isPasswordCorrect) {
-            return res.status(400).json({ success: false, message: 'Invalid password' });
+            return res.status(400).json({ message: 'Invalid password' });
         }
 
         generateToken(user._id, res);
 
         return res.status(200).json({
-            success: true,
-            user: {
-                _id: user._id,
-                firstname: user.firstname,
-                email: user.email,
-                profilePicture: user.profilePicture,
-            }
+            _id: user._id,
+            firstname: user.firstname,
+            email: user.email,
+            profilePicture: user.profilePicture,
         });
 
     } catch (error) {
         console.log("error in login : ", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Login failed"
-        });
+        return res.status(500).json({ message: "Login failed" });
     }
 };
 
@@ -96,15 +76,11 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
     try {
         res.clearCookie('ChatAppToken', { maxAge: 0 });
-        return res.status(200).json({ success : true, message: 'Logout successful' });
+        return res.status(200).json({ message: 'Logout successful' });
 
     } catch (error) {
         console.log("error in logout : ", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Logout failed"
-        });
+        return res.status(500).json({ message: "Logout failed" });
     }
 };
 
@@ -115,7 +91,7 @@ export const updateProfile = async (req, res) => {
         const userId = req.user._id;
 
         if (!profilePicture) {
-            return res.status(400).json({ success: false, message: "Profile pic is required" });
+            return res.status(400).json({ message: "Profile pic is required" });
         }
 
         const uploadResponse = await cloudinary.uploader.upload(profilePicture);
@@ -129,11 +105,7 @@ export const updateProfile = async (req, res) => {
 
     } catch (error) {
         console.log("error in update profiles : ", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Update failed"
-        });
+        return res.status(500).json({ message: "Update failed" });
     }
 };
 
@@ -144,10 +116,6 @@ export const checkAuth = async (req, res) => {
 
     } catch (error) {
         console.log("error in checkAuth : ", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Check auth failed"
-        });
+        return res.status(500).json({ message: "Check auth failed" });
     }
 }
