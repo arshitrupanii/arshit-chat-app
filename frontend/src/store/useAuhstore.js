@@ -31,14 +31,12 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await Axiosinstance.post("auth/signup", data);
 
-      if (res.data?.success) {
-        set({ authUser: res.data });
-        toast.success("Account created successfully");
-      }
+      set({ authUser: res.data });
+      toast.success("Account created successfully");
 
       get().connectSocket();
     } catch (error) {
-      toast.error(error.response.data.errors[0].msg);
+      toast.error(error.response.data.message);
     } finally {
       set({ isLoading: false });
     }
@@ -50,14 +48,12 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await Axiosinstance.post("auth/login", data);
 
-      if (res.data?.success) {
-        set({ authUser: res.data });
-        toast.success("Logged in successfully");
-      }
+      set({ authUser: res.data });
+      toast.success("Logged in successfully");
 
       get().connectSocket();
     } catch (error) {
-      toast.error(error.response.data.errors[0].msg);
+      toast.error(error.response.data.message);
     } finally {
       set({ isLoading: false });
     }
@@ -65,12 +61,10 @@ export const useAuthStore = create((set, get) => ({
 
   logout: async () => {
     try {
-      const res = await Axiosinstance.post("auth/logout");
+      await Axiosinstance.post("auth/logout");
 
-      if (res.data?.success) {
-        set({ authUser: null });
-        toast.success("Logged out successfully");
-      }
+      set({ authUser: null });
+      toast.success("Logged out successfully");
 
       get().disconnectSocket();
     } catch (error) {
@@ -84,10 +78,8 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await Axiosinstance.put("auth/update-profile", data);
 
-      if (res.data?.success) {
-        set({ authUser: res.data });
-        toast.success("Profile updated successfully");
-      }
+      set({ authUser: res.data });
+      toast.success("Profile updated successfully");
 
     } catch (error) {
       toast.error(error.response.data.message);
@@ -116,9 +108,7 @@ export const useAuthStore = create((set, get) => ({
       });
 
     } catch (error) {
-      // Silently handle socket connection errors in production
       if (import.meta.env.MODE === "development") {
-        // eslint-disable-next-line no-console
         console.error("Error connecting socket:", error);
       }
     }
