@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
-  const [btnLoading, setbtnLoading] = useState(false)
+  const [btnLoading, setbtnLoading] = useState(false);
   const fileInputRef = useRef(null);
   const { sendMessage } = useChatStore();
 
@@ -52,8 +52,8 @@ const MessageInput = () => {
   };
 
   return (
-    <div className="p-4 w-full">
-      {/* {imagePreview && (
+    <div className="p-1.5 sm:p-2 md:p-3 lg:p-4 w-full flex-shrink-0">
+      {imagePreview && (
         <div className="mb-3 flex items-center gap-2">
           <div className="relative">
             <img
@@ -71,47 +71,49 @@ const MessageInput = () => {
             </button>
           </div>
         </div>
-      )} */}
+      )}
 
-      <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-        <div className="flex-1 flex gap-2">
+      <form
+        onSubmit={handleSendMessage}
+        className="flex items-center gap-1 sm:gap-1.5 md:gap-2"
+      >
+        <div className="flex-1 flex gap-1 sm:gap-1.5 md:gap-2 min-w-0">
           <input
             type="text"
-            className="w-full input input-bordered rounded-lg input-sm sm:input-md"
+            className="w-full input input-bordered rounded-lg input-sm sm:input-md text-xs sm:text-sm md:text-base"
             placeholder="Type a message..."
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-          {/* <input
+          <input
             type="file"
             accept="image/*"
             className="hidden"
             ref={fileInputRef}
             onChange={handleImageChange}
-          /> */}
+          />
 
-          {/* <button
+          <button
             type="button"
             className={`hidden sm:flex btn btn-circle
                      ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
             onClick={() => fileInputRef.current?.click()}
           >
             <Image size={20} />
-          </button> */}
+          </button>
         </div>
 
         {btnLoading ? (
-          <Loader className='animate-spin text-primary' size={35} />
+          <Loader className="animate-spin text-primary w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 flex-shrink-0" />
         ) : (
           <button
             type="submit"
-            className="btn btn-sm btn-circle"
+            className="btn btn-sm sm:btn-md btn-circle flex-shrink-0"
             disabled={!text.trim() && !imagePreview}
           >
-            <Send size={22} />
+            <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
           </button>
-        )
-        }
+        )}
       </form>
     </div>
   );

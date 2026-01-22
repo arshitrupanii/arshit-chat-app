@@ -49,7 +49,15 @@ export const sendMessage = async (req, res) => {
         let imageUrl;
 
         if (image) {
-            const uploadResponse = await cloudinary.uploader.upload(image);
+            // it compress image and save
+            const uploadResponse = await cloudinary.uploader.upload(image, {
+                folder: "uploads",
+                quality: "auto:eco",
+                fetch_format: "auto",
+                width: 1600,
+                crop: "limit"
+            });
+
             imageUrl = uploadResponse.secure_url;
         }
 
