@@ -8,8 +8,12 @@ import messageRoutes from './routes/message.routes.js';
 import { connectDB } from './lib/db.js';
 import { app, server } from "./lib/socket.js";
 
-dotenv.config();
-
+dotenv.config({
+  path:
+    process.env.NODE_ENV === "production"
+      ? ".env.production"
+      : ".env.development",
+});
 
 const PORT = process.env.PORT || 3000;
 
@@ -36,9 +40,11 @@ app.get('/', async (req, res) => {
 async function startServer() {
   try {
     await connectDB();
+
     server.listen(PORT, () => {
       console.log("Server running on port", PORT);
     });
+    
   } catch (err) {
     console.error("Server failed to start", err);
     process.exit(1);

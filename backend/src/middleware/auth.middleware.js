@@ -6,7 +6,7 @@ export const authMiddleware = async (req, res, next) => {
 
     try {
         if (!token) {
-            return res.status(401).json({ success: false, message: 'Unauthorized user' });
+            return res.status(401).json({ message: 'Unauthorized user' });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -14,7 +14,7 @@ export const authMiddleware = async (req, res, next) => {
         const user = await User.findById(decoded.userId).select("-password -createdAt -updatedAt");
 
         if (!user) {
-            return res.status(401).json({ success: false, message: 'Un-authorized user' });
+            return res.status(401).json({ message: 'Un-authorized user' });
         }
 
         req.user = user;
@@ -22,10 +22,10 @@ export const authMiddleware = async (req, res, next) => {
 
     } catch (error) {
         if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-            return res.status(401).json({ success : false, message: 'Invalid or expired token' });
+            return res.status(401).json({ message: 'Invalid or expired token' });
         }
         console.log("error in authMiddleware : ", error);
-        return res.status(500).json({ success : false, message: 'Internal error' });
+        return res.status(500).json({ message: 'Internal error' });
     }
 }
 
