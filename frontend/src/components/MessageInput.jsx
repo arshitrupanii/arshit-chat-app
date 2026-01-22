@@ -80,7 +80,7 @@ const MessageInput = () => {
         <div className="flex-1 flex gap-1 sm:gap-1.5 md:gap-2 min-w-0">
           <input
             type="text"
-            className="w-full input input-bordered rounded-lg input-sm sm:input-md text-xs sm:text-sm md:text-base"
+            className="w-full input input-bordered rounded-lg input-sm sm:input-md text-sm sm:text-base"
             placeholder="Type a message..."
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -95,11 +95,12 @@ const MessageInput = () => {
 
           <button
             type="button"
-            className={`hidden sm:flex btn btn-circle
+            className={`flex btn btn-circle btn-sm sm:btn-md
                      ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
             onClick={() => fileInputRef.current?.click()}
+            aria-label="Attach image"
           >
-            <Image size={20} />
+            <Image className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
 
