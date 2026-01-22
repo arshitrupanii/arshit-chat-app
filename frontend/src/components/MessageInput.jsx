@@ -8,6 +8,7 @@ const MessageInput = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [btnLoading, setbtnLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const textInputRef = useRef(null);
   const { sendMessage } = useChatStore();
 
   const handleImageChange = (e) => {
@@ -46,13 +47,22 @@ const MessageInput = () => {
       setText("");
       setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
+      
+      // Refocus input to keep keyboard open on mobile
+      setTimeout(() => {
+        textInputRef.current?.focus();
+      }, 100);
     } catch (error) {
       console.error("Failed to send message:", error);
+      // Still refocus even on error
+      setTimeout(() => {
+        textInputRef.current?.focus();
+      }, 100);
     }
   };
 
   return (
-    <div className="p-1.5 sm:p-2 md:p-3 lg:p-4 w-full flex-shrink-0">
+    <div className="p-2 sm:p-3 md:p-4 w-full flex-shrink-0 bg-base-100 border-t border-base-300 sticky bottom-0 z-10">
       {imagePreview && (
         <div className="mb-3 flex items-center gap-2">
           <div className="relative">
@@ -75,12 +85,13 @@ const MessageInput = () => {
 
       <form
         onSubmit={handleSendMessage}
-        className="flex items-center gap-1 sm:gap-1.5 md:gap-2"
+        className="flex items-center gap-2 sm:gap-2 md:gap-3"
       >
-        <div className="flex-1 flex gap-1 sm:gap-1.5 md:gap-2 min-w-0">
+        <div className="flex-1 flex gap-2 sm:gap-2 md:gap-3 min-w-0">
           <input
+            ref={textInputRef}
             type="text"
-            className="w-full input input-bordered rounded-lg input-sm sm:input-md text-sm sm:text-base"
+            className="w-full input input-bordered rounded-lg text-sm sm:text-base py-2 sm:py-3 min-h-[44px] sm:min-h-[48px]"
             placeholder="Type a message..."
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -95,7 +106,7 @@ const MessageInput = () => {
 
           <button
             type="button"
-            className={`flex btn btn-circle btn-sm sm:btn-md
+            className={`flex btn btn-circle min-h-[44px] sm:min-h-[48px] w-11 sm:w-12
                      ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
             onClick={() => fileInputRef.current?.click()}
             aria-label="Attach image"
@@ -105,14 +116,14 @@ const MessageInput = () => {
         </div>
 
         {btnLoading ? (
-          <Loader className="animate-spin text-primary w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 flex-shrink-0" />
+          <Loader className="animate-spin text-primary w-6 h-6 sm:w-7 sm:h-7 flex-shrink-0" />
         ) : (
           <button
             type="submit"
-            className="btn btn-sm sm:btn-md btn-circle flex-shrink-0"
+            className="btn btn-circle min-h-[44px] sm:min-h-[48px] w-11 sm:w-12 flex-shrink-0"
             disabled={!text.trim() && !imagePreview}
           >
-            <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+            <Send className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         )}
       </form>
